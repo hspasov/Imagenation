@@ -33,6 +33,7 @@
     },
     "dependencies": {
         "electron-reload": "^1.2.2",
+        "jimp": "^0.2.28",
         "semantic-ui-css": "^2.2.12",
         "semantic-ui-react": "^0.76.0"
     }

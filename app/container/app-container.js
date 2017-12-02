@@ -1,9 +1,32 @@
 import React from "react";
-import { Container, Divider, Dropdown, Grid, Header, List, Menu, Segment } from "semantic-ui-react";
+import { Container, Divider, Dropdown, Grid, Header, Image, Input, List, Menu, Segment } from "semantic-ui-react";
+
+const Jimp = window.require("jimp");
 
 class AppContainer extends React.Component {
     constructor(props) {
         super(props);
+
+        this.state = {
+            image: ""
+        };
+
+        this.handleSelectImage = this.handleSelectImage.bind(this);
+    }
+
+    handleSelectImage(event) {
+        if (event.target.files[0]) {
+            let file = event.target.files[0];
+            console.log(file.path);
+            Jimp.read(file.path, (err, image) => {
+                image.clone().color([
+                    { apply: 'hue', params: [-90] },
+                    { apply: 'lighten', params: [50] },
+                    { apply: 'xor', params: ['#06D'] }
+                ]).write(file.path);
+            });
+            this.setState({ image: file.path });
+        }
     }
 
     render() {
@@ -37,6 +60,8 @@ class AppContainer extends React.Component {
                 </Menu>
 
                 <Container text style={{ marginTop: "7em" }}>
+                    <Input type="file" onChange={this.handleSelectImage} />
+                    <Image src={this.state.image} size="large"></Image>
                     <Header as="h1">Semantic UI React Fixed Template</Header>
                     <p>This is a basic fixed menu template using fixed size containers.</p>
                     <p>A text container is used for the main container, which is useful for single column layouts.</p>
