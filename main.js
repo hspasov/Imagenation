@@ -5,14 +5,10 @@ const BrowserWindow = electron.BrowserWindow;
 const path = require("path");
 const url = require("url");
 
-require("electron-reload")(__dirname, {
-    electron: path.join(__dirname, "node_modules", ".bin", "electron")
-});
-
 let mainWindow;
 
 const createWindow = () => {
-    mainWindow = new BrowserWindow({width: 800, height: 600});
+    mainWindow = new BrowserWindow({ width: 800, height: 600 });
 
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, "index.html"),

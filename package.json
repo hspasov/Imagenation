@@ -22,19 +22,17 @@
         "babel-loader": "^7.1.2",
         "babel-preset-env": "^1.6.1",
         "babel-preset-react": "^6.24.1",
-        "css-loader": "^0.28.7",
         "electron": "~1.7.8",
         "electron-devtools-installer": "^2.2.1",
-        "react": "^16.1.1",
-        "react-dom": "^16.1.1",
+        "electron-rebuild": "^1.6.0",
         "style-loader": "^0.19.0",
-        "url-loader": "^0.6.2",
-        "webpack": "^3.8.1"
+        "url-loader": "^0.6.2"
     },
     "dependencies": {
+        "caman": "^4.1.2",
+        "canvas": "^1.6.7",
         "electron-reload": "^1.2.2",
-        "jimp": "^0.2.28",
-        "semantic-ui-css": "^2.2.12",
-        "semantic-ui-react": "^0.76.0"
+        "jquery": "^3.2.1",
+        "semantic-ui-css": "^2.2.12"
     }
 }

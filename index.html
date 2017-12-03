@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Imagenation</title>
-    </head>
-    <body>
-        <div id="content"></div>
-        <script src="./public/js/bundle.js"></script>
-    </body>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Imagenation</title>
+</head>
+
+<body>
+    <div id="content">
+        <input type="file" id="imageUpload">
+        <div id="imageHolder" height="500"></div>
+        <div id="downloadLinkHolder"></div>
+        <button id="brighten">Brighten</button>
+        <button id="darken">Darker</button>
+        <button id="download">Download</button>
+    </div>
+    <script src="./public/js/glfx.js"></script>
+    <script src="./app/app.js"></script>
+</body>
+
 </html>
