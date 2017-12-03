@@ -6,11 +6,12 @@ const path = require("path");
 window.$ = require("jquery");
 
 
-let canvas;
+let canv;
 let texture;
+let base64Url;
 window.onload = function () {
     try {
-        canvas = fx.canvas();
+        canv = fx.canvas();
     } catch (e) {
         alert(e);
         return;
@@ -20,17 +21,18 @@ window.onload = function () {
 $("#imageUpload").change((event) => {
     const imgPath = event.target.files[0].path;
     $("#brighten").click(() => {
-        canvas.draw(texture).curves([[0, 0.5], [1, 0]]).update();
+        canv.draw(texture).curves([[0, 0.5], [1, 0]]).update();
+        base64Url = canv.toDataURL();
     });
     $("#darken").click(() => {
-        canvas.draw(texture).brightnessContrast(-0.25, 0).update();
+        canv.draw(texture).brightnessContrast(-0.25, 0).update();
+        base64Url = canv.toDataURL();
     });
     $("#download").click(() => {
-        const link = document.createElement("a");
-        link.href = document.getElementsByTagName("canvas")[0].toDataURL();
+        const link = document.getElementById("downloadLink");
+        link.href = base64Url;
         link.download = "happy.png";
         link.innerHTML = "Download";
-        document.getElementById("downloadLinkHolder").appendChild(link);
     });
     loadImage(imgPath);
 });
@@ -41,19 +43,25 @@ function loadImage(path) {
         if (err) throw err;
         let img = new Canvas.Image;
         img.onload = () => {
-            let canvas_ = new Canvas(img.width, img.height);
+            let canvas_ = new Canvas(500, 500);
             let ctx = canvas_.getContext("2d");
-            ctx.drawImage(img, 0, 0, img.width, img.height);
+            ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 500, 500);
             let image = document.createElement("img");
             image.onload = () => {
-                texture = canvas.texture(image);
-                canvas.draw(texture).update();
-                image.parentNode.insertBefore(canvas, image);
-                image.parentNode.removeChild(image);
+                texture = canv.texture(image);
+                canv.draw(texture).update();
+                $("#imageHolder").append(canv);
+                base64Url = canv.toDataURL();
             }
             image.src = canvas_.toDataURL();
-            $("#imageHolder").append(image);
         };
         img.src = data;
     });
+}
+
+function sleep(miliseconds) {
+    var currentTime = new Date().getTime();
+
+    while (currentTime + miliseconds >= new Date().getTime()) {
+    }
 }
