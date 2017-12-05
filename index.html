@@ -10,10 +10,39 @@
     <div id="content">
         <input type="file" id="imageUpload">
         <div id="imageHolder" height="500"></div>
-        <a id="downloadLink"></a>
-        <button id="brighten">Brighten</button>
-        <button id="darken">Darker</button>
-        <button id="download">Download</button>
+        <a id="imageDownloadLink"></a>
+        <div id="red">
+            <label>Red</label>
+            <input type="number" min="0" max="1" step="0.1" value="0">
+            <button class="addPoint">Add point</button>
+            <label>0</label><input type="range" min="0" max="1" value="0" step="0.1">
+            <label>1</label><input type="range" min="0" max="1" value="1" step="0.1">
+        </div>
+        <div id="green">
+            <label>Green</label>
+            <input type="number" min="0" max="1" step="0.1" value="0">
+            <button class="addPoint">Add point</button>
+            <label>0</label><input type="range" min="0" max="1" value="0" step="0.1">
+            <label>1</label><input type="range" min="0" max="1" value="1" step="0.1">
+        </div>
+        <div id="blue">
+            <label>Blue</label>
+            <input type="number" min="0" max="1" step="0.1" value="0">
+            <button class="addPoint">Add point</button>
+            <label>0</label><input type="range" min="0" max="1" value="0" step="0.1">
+            <label>1</label><input type="range" min="0" max="1" value="1" step="0.1">
+        </div>
+        <div id="luminance">
+            <label>Luminance</label>
+            <input type="number" min="0" max="1" step="0.1" value="0">
+            <button class="addPoint">Add point</button>
+            <label>0</label>
+            <input type="range" min="0" max="1" value="0" step="0.1">
+            <label>1</label>
+            <input type="range" min="0" max="1" value="1" step="0.1">
+        </div>
+        <button id="downloadButton">Download</button>
+        <button id="reset">Reset</button>
     </div>
     <script src="./public/js/glfx.js"></script>
     <script src="./app/app.js"></script>
