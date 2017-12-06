@@ -1,9 +1,61 @@
+const electron = require("electron");
 const fs = require("fs");
 const Canvas = require("canvas");
-
 const canv = fx.canvas();
+const { Menu, MenuItem, dialog } = electron.remote;
+window.$ = window.jQuery = require("jquery");
+
 let texture;
 let imageDownloadLink;
+
+const menu = Menu.buildFromTemplate([
+    {
+        label: 'File',
+        submenu: [
+            {
+                label: "Open image",
+                click: selectImage
+            },
+            {
+                type: "separator"
+            },
+            {
+                label: "Save image",
+                click: onDownload
+            },
+            {
+                type: "separator"
+            },
+            {
+                label: "Exit",
+                role: "quit"
+            }
+        ]
+    },
+    {
+        label: "Help",
+        submenu: [
+            {
+                label: "Github repository",
+                click: () => electron.shell.openExternal("https://github.com/hspasov/Imagenation")
+            },
+            {
+                type: "separator"
+            },
+            {
+                label: "About",
+                click: () =>
+                    dialog.showMessageBox({
+                        type: "none",
+                        title: "Imagenation",
+                        message: "Computer graphics project",
+                        detail: "Created by\nBoyan Dimitrov, Lachezar Zahariev and Hristo Spasov\nELSYS 2017"
+                    })
+            }
+        ]
+    }
+]);
+Menu.setApplicationMenu(menu);
 
 // Set default values
 const curvesValues = {
@@ -22,10 +74,10 @@ const curvesValues = {
     }
 };
 
-document.getElementById("imageUpload").addEventListener("change", onImageUpload);
-
 Array.from(document.querySelectorAll("[type='range']"))
     .forEach(element => element.addEventListener("change", sliderChange));
+
+document.getElementById("openImage").addEventListener("click", selectImage);
 
 document.getElementById("downloadButton").addEventListener("click", onDownload);
 
@@ -33,6 +85,12 @@ document.getElementById("reset").addEventListener("click", setDefault);
 
 Array.from(document.getElementsByClassName("addPoint"))
     .forEach(element => element.addEventListener("click", onAddPoint));
+
+function selectImage() {
+    dialog.showOpenDialog({ properties: ["openFile"] }, imgPath => {
+        imgPath && loadImage(imgPath[0]);
+    });
+}
 
 function onImageUpload(event) {
     const imgPath = event.target.files[0].path;
@@ -47,8 +105,11 @@ function onDownload() {
 }
 
 function onAddPoint(event) {
-    const setting = event.target.parentElement.id;
+    const setting = event.target.parentElement.parentElement.parentElement.id;
     const newDefaultValue = event.target.previousElementSibling.value;
+
+    if (curvesValues[setting][newDefaultValue]) return;
+
     curvesValues[setting][newDefaultValue] = [newDefaultValue, newDefaultValue];
 
     const label = document.createElement("label");
@@ -62,13 +123,17 @@ function onAddPoint(event) {
     slider.setAttribute("step", 0.1);
     slider.addEventListener("change", sliderChange);
 
+    const point = document.createElement("div");
+    point.setAttribute("class", "item");
+    point.appendChild(label);
+    point.appendChild(slider);
+
     const settingSection = document.getElementById(setting);
-    settingSection.appendChild(label);
-    settingSection.appendChild(slider);
+    settingSection.appendChild(point);
 }
 
 function sliderChange(event) {
-    const setting = event.target.parentElement.id;
+    const setting = event.target.parentElement.parentElement.id;
     const defaultValue = event.target.defaultValue;
     const newValue = event.target.value;
     curvesValues[setting][defaultValue] = [defaultValue, newValue];
@@ -77,8 +142,11 @@ function sliderChange(event) {
 
 function setDefault() {
     Array.from(document.querySelectorAll("[type='range']")).forEach(element => {
-        const setting = element.parentElement.id;
+        const setting = element.parentElement.parentElement.id;
         const defaultValue = element.defaultValue;
+        if (element.defaultValue != 1 && element.defaultValue != 0) {
+            element.parentElement.remove();
+        }
         element.value = defaultValue;
         curvesValues[setting][defaultValue] = [defaultValue, defaultValue];
     });
@@ -99,9 +167,15 @@ function loadImage(path) {
         if (err) throw err;
         const img = new Canvas.Image;
         img.onload = () => {
-            const canvas_ = new Canvas(500, 500);
+            const imageHolder = document.getElementById("imageHolder");
+            const width = imageHolder.clientWidth;
+            const height = imageHolder.clientHeight;
+            console.log(imageHolder.clientHeight);
+            console.log(imageHolder.clientWidth);
+            console.log(imageHolder.width);
+            const canvas_ = new Canvas(width, height);
             const ctx = canvas_.getContext("2d");
-            ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, 500, 500);
+            ctx.drawImage(img, 0, 0, img.width, img.height * (img.width / width), 0, 0, width, height * (img.width/width));
             const image = document.createElement("img");
             image.onload = () => {
                 texture = canv.texture(image);

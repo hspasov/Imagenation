@@ -24,6 +24,7 @@
     },
     "dependencies": {
         "canvas": "^1.6.7",
+        "jquery": "^3.2.1",
         "semantic-ui-css": "^2.2.12"
     }
 }
