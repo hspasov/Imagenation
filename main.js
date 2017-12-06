@@ -16,12 +16,6 @@ const createWindow = () => {
         slashes: true
     }));
 
-    mainWindow.webContents.openDevTools();
-
-    const { default: installExtension, REACT_DEVELOPER_TOOLS } = require("electron-devtools-installer");
-    installExtension(REACT_DEVELOPER_TOOLS).catch((err) => {
-        console.log("An error occurred while installing extention: ", err);
-    });
     mainWindow.on("closed", () => {
         mainWindow = null;
     });

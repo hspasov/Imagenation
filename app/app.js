@@ -92,11 +92,6 @@ function selectImage() {
     });
 }
 
-function onImageUpload(event) {
-    const imgPath = event.target.files[0].path;
-    loadImage(imgPath);
-}
-
 function onDownload() {
     const link = document.getElementById("imageDownloadLink");
     link.href = imageDownloadLink;
@@ -170,12 +165,9 @@ function loadImage(path) {
             const imageHolder = document.getElementById("imageHolder");
             const width = imageHolder.clientWidth;
             const height = imageHolder.clientHeight;
-            console.log(imageHolder.clientHeight);
-            console.log(imageHolder.clientWidth);
-            console.log(imageHolder.width);
             const canvas_ = new Canvas(width, height);
             const ctx = canvas_.getContext("2d");
-            ctx.drawImage(img, 0, 0, img.width, img.height * (img.width / width), 0, 0, width, height * (img.width/width));
+            ctx.drawImage(img, 0, 0, img.width, img.height, 0, 0, width, height);
             const image = document.createElement("img");
             image.onload = () => {
                 texture = canv.texture(image);
